@@ -2,23 +2,14 @@ package sequenceMatcher;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
 import org.biojava3.core.sequence.compound.AmbiguityDNACompoundSet;
-import org.biojava3.core.sequence.compound.NucleotideCompound;
-
 import org.biojava3.core.sequence.DNASequence;
 import org.junit.Test;
-
-import com.google.common.primitives.Chars;
 
 public class SequenceReaderTest {
 
