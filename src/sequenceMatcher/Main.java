@@ -3,6 +3,7 @@ package sequenceMatcher;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.biojava3.core.sequence.DNASequence;
 
@@ -31,6 +32,40 @@ public class Main {
 		
 	}
 
+	/**
+	 * Generate a list of element pairs. Each pair is stitched in a single string.
+	 * Example: 
+	 * ArrayList<String> lst= new ArrayList<String>();
+	 * lst.add("a"); lst.add("b"); lst.add("c")
+	 * combinePairs(lst) -> ['aa', 'ab', 'ac', 'bb', 'bc', 'cc'] 
+	 * @param nameLst
+	 * @return
+	 */
+	private static HashSet<String> combinePairs(ArrayList<String> nameLst){
+		HashSet<String> pairs= new HashSet<String>();
+		for(int i= 0; i < nameLst.size(); i++){
+			for(int j= i; j < nameLst.size(); j++){
+				pairs.add(nameLst.get(i) + nameLst.get(j));
+			}
+		}
+		return pairs;
+	}
+
+	/**
+	 * Returns pairs of names from fasta list.
+	 * @param fasta
+	 * @return
+	 */
+	private static HashSet<String> combineNamePairsFromFasta(ArrayList<String[]> fasta){
+		ArrayList<String> nameLst= new ArrayList<String>();
+		for(String[] x : fasta){
+			nameLst.add(x[0]);
+		}
+		HashSet<String> pairs= combinePairs(nameLst);
+		return pairs;
+	}
+
+	
 	/**
 	 * Routine to convert sam to tab and back. Called with SequenceMatcher convert ...
 	 * @param opts Arguments taken from command line and parsed by ArgParse class
@@ -91,15 +126,21 @@ public class Main {
 		// How many loops thorough each sequence in B? 
 		// 1 if rev comp is not required. 2 otherwise (+ and -)
 		int nLoops= (!norc) ? 2 : 1;
-		
+				
 		// ---------------------------------------------------------------------
 		
 		ArrayList<String[]> fastaFileA= SequenceReader.readFastaToList(a);
 		
 		System.err.println("Sequences in A (" + a + "): " + fastaFileA.size());
 		
+		HashSet<String> pairs= new HashSet<String>();
+		if(b.isEmpty()){
+			//If b file is not given this is just the a file matched against itself.
+			b= a;
+			pairs= combineNamePairsFromFasta(fastaFileA);
+		}
 		// ---------------------------------------------------------------------
-		// Prepare reading file b
+		// Prepare reading file b. 
 		BufferedReader brB= Opener.openBr(b);
 				
 		long t0= System.currentTimeMillis();
@@ -142,6 +183,11 @@ public class Main {
 					} else {
 						System.exit(1);
 					}
+					nLoopCnt++;
+					if(m.skipMatch(pairs)){
+						continue;
+					}
+					
 					double d= m.getFilterDistance(method, nm);
 					
 					if(nm < 0 || (d >= 0 && d <= nm)){
@@ -167,7 +213,6 @@ public class Main {
 							System.out.println(m);
 						}
 					}
-					nLoopCnt++;
 				}
 			} // end for loop file A
 			nseq++;

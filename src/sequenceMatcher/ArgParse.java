@@ -11,7 +11,7 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 
 public class ArgParse {
 	
-	public static String VERSION= "0.1.0";
+	public static String VERSION= "0.2.0";
 	
 	/* Parse command line args */
 	public static Namespace argParse(String[] args){
@@ -73,9 +73,11 @@ public class ArgParse {
 		
 		matchSubparser.addArgument("-b", "--b")
 			.type(String.class)
-			.required(true)
+			.required(false)
+			.setDefault("")
 			.help("Fasta file 'B'; can be gzip'd. Use '-' to read from stdin. "
-					+ "In SAM format these are 'Reads'");
+					+ "In SAM format these are 'Reads'. If null the a file will be "
+					+ "matched against itself.");
 		
 		matchSubparser.addArgument("-m", "--method")
 			.type(String.class)

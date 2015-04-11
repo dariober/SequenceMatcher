@@ -2,6 +2,12 @@ package sequenceMatcher;
 
 import static org.junit.Assert.*;
 
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 public class MatchTest {
@@ -99,4 +105,40 @@ public class MatchTest {
 		assertEquals(6, m.getPos());
 	}
 	
+	@Test
+	public void returnBoolToSkipMatch(){
+		boolean skip;
+		Match m= new Match();
+		Set<String> pairs= new HashSet<String>();
+		
+		// If pairs is empty do match
+		skip= m.skipMatch(pairs);
+		assertFalse(skip);
+		
+		// If the pair of seqs are NOT in the pair do not match.
+		pairs.add("AB");
+		m.setNameA("B");
+		m.setNameB("A");
+		skip= m.skipMatch(pairs);
+		assertTrue(skip);
+
+		// If the pair of seqs are in the pair do match.
+		pairs.add("AB");
+		m.setNameA("A");
+		m.setNameB("B");
+		skip= m.skipMatch(pairs);
+		assertFalse(skip);
+
+		// If the pair of seqs are the same, skip the match if the strand is plus.
+		pairs.add("AA");
+		m.setNameA("A");
+		m.setNameB("A");
+		m.setStrand("+");
+		skip= m.skipMatch(pairs);
+		assertTrue(skip);
+		m.setStrand(".");
+		skip= m.skipMatch(pairs);
+		assertFalse(skip);
+
+	}
 }

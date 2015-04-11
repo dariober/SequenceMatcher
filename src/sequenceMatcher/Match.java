@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.biojava3.alignment.Alignments;
@@ -430,6 +431,26 @@ public class Match {
 		this.len_aln= Integer.parseInt(aline[rev_header.get("len_aln")]);
 		this.alnA= aline[rev_header.get("alnA")];
 		this.alnB= aline[rev_header.get("alnB")];
+	}
+	public boolean skipMatch(Set<String> pairs) {
+		if(pairs.size() == 0){
+			// If the pair set is empty, always match.
+			return false;
+		} else {
+			// The name pair is just the two string concatenated. This allows
+			// using HashSet.contains() method without much fuss.
+			String namePair = nameA + nameB;
+			if(pairs.contains(namePair)){
+				if(nameA.equals(nameB) && strand.equals("+")){
+					return true;
+				} else {
+					return false;
+				}
+			} else if(!pairs.contains(namePair)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
