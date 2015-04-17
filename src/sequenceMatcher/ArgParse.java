@@ -20,23 +20,15 @@ public class ArgParse {
 				+ "This program answers the question: Which sequences in file a "
 				+ "are similar to the sequences in file b. In addition it optionally performs gloabl alignment.\n"
 				+ "\n"
-				+ "OUTPUT\n"
-				+ "Sam or tabular with columns:\n"
-				+ "1. Sequence name from the A file\n"
-				+ "2. Sequence name from the B file\n"
-				+ "3. Strand: + if sequence B is matched as is; - if B is rev comp'd)\n"
-				+ "4. Edit distance\n"
-				+ "5. Length sequence A\n"
-				+ "6. Length sequence B\n"
-				+ "7. Sequence A, if matched as rev. comp. it is rev comp'd here.\n"
-				+ "8. Sequence B\n"
-				+ "\n"
 				+ "EXAMPLE\n"
 				+ "java -jar SequenceMatcher.jar match -a seqA.fa -b seqB.fa\n"
 				+ "\n"
 				+ "java -jar SequenceMatcher.jar match -a seqA.fa -b seqB.fa -o sam \\\n"
 				+ "| samtools view -Sb - > aln.bam"
 				+ "\n"
+				+ "SEE ALSO"
+				+ "\n"
+				+ "https://github.com/dariober/SequenceMatcher/wiki"
 				+ "\n"
 				+ "NOTES & TODO\n"
 				+ "Names of fasta sequences must be unique within file.\n"
@@ -94,7 +86,7 @@ public class ArgParse {
 		
 		matchSubparser.addArgument("-norc", "--norc")
 			.action(Arguments.storeTrue())
-			.help("Do not reverse complement the sequences in file A. I.e. only match sequences as they are.");	
+			.help("Do not reverse complement the sequences in file B. I.e. only match sequences as they are.");	
 
 		matchSubparser.addArgument("-aln", "--aln")
 			.choices("none", "global", "local")
