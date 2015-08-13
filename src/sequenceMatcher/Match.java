@@ -1,10 +1,13 @@
 package sequenceMatcher;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -130,6 +133,9 @@ public class Match {
 		this.seqB = seqB;
 	}
 
+	public void setAln_score(int aln_score) {
+		this.aln_score= aln_score;
+	}	
 	public int getAln_score() {
 		return aln_score;
 	}
@@ -277,6 +283,24 @@ public class Match {
 		this.len_A= this.seqA.length();
 		this.len_B= this.seqB.length();
 	}
+
+	/* C O M P A R A T O R S */ 	
+	
+	// Useful example http://stackoverflow.com/questions/4432774/how-do-i-make-2-comparable-methods-in-only-one-class
+    static Comparator<Match> getAlnScoreComparator() {
+        return new Comparator<Match>() {
+
+            @Override
+            public int compare(Match m1, Match m2) {
+            	Integer a1 = m1.getAln_score();
+            	Integer a2 = m2.getAln_score();
+                int i= a2.compareTo(a1); // Ascending a1.compareTo(a2)
+                if (i != 0) return i;
+                return i;
+            }
+        };
+    }
+	
 	
 	// -------------------------------------------------------------------------
 		
@@ -451,6 +475,25 @@ public class Match {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Print list of matches according to parameters
+	 * @param matches
+	 * @param outfmt Output format as passed to cmd line.
+	 */
+	public static void matchListPrinter(ArrayList<Match> matches, String outfmt){
+		if(matches.size() == 0){
+			return;
+		}
+		Collections.shuffle(matches, new Random());
+		Collections.sort(matches, Match.getAlnScoreComparator());
+		if(outfmt.equals("sam")){
+			System.out.println(Sam.matchToSam(matches.get(0)).toString());
+		}else{
+			System.out.println(matches.get(0));
+		}
+		
 	}
 
 }

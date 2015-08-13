@@ -167,11 +167,13 @@ public class Main {
 			if(!norc){
 				seqBrc= new DNASequence(seqB[1]).getReverseComplement().getSequenceAsString();
 			}
-			
 			for(int i=0; i < fastaFileA.size(); i++){
 				int nLoopCnt= 0;
-								
+
+				ArrayList<Match> matches= new ArrayList<Match>();
+				
 				while(nLoopCnt < nLoops) {
+					// Loop to match in forward and revcomp
 					String[] seqA= fastaFileA.get(i);
 					Match m= new Match(seqA, seqB);
 					
@@ -207,13 +209,13 @@ public class Main {
 							m.align();
 						}
 						nmatch++;
-						if(outfmt.equals("sam")){
-							System.out.println(Sam.matchToSam(m).toString());
-						}else{
-							System.out.println(m);
-						}
+						matches.add(m);
 					}
-				}
+				} // End loop to match seq A to B and A to B revcomp. 
+				  // List matches contains one element if match to revcomp was nopt required or two
+				
+				Match.matchListPrinter(matches, outfmt);
+			
 			} // end for loop file A
 			nseq++;
 			if(nseq % 1000 == 0){

@@ -11,7 +11,7 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 
 public class ArgParse {
 	
-	public static String VERSION= "0.2.0";
+	public static String VERSION= "0.3.0";
 	
 	/* Parse command line args */
 	public static Namespace argParse(String[] args){
@@ -34,10 +34,14 @@ public class ArgParse {
 				+ "Names of fasta sequences must be unique within file.\n"
 				+ "LD, HD, JWD, len_A, and len_B are computed on the raw input sequences NOT on the aligned sequences\n"
 				+ "so they are independent on the alignment method chosen.\n"
+				+ "When aligning in forward and revcomp, only the best match is returned. "
+				+ "In case of ties one of the two matches is picked at random."
 				+ "\n"
-				+ "Todo: Option to customize RG tag\n"
+				+ "Todo: Better choice of which match to output in case of ties. Options to output both."
 				+ "Todo: Read fastq files and output quality scores, although scores are not used.\n"
-				+ "Todo: Support alternative scoring matrices.";
+				+ "Todo: Support alternative scoring matrices.\n"
+				+ "Todo: Option to customize RG tag."
+;
 		
 		ArgumentParser parser= ArgumentParsers
 				.newArgumentParser("SequenceMatcher")

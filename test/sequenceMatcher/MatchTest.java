@@ -2,9 +2,8 @@ package sequenceMatcher;
 
 import static org.junit.Assert.*;
 
-import java.awt.List;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -141,4 +140,41 @@ public class MatchTest {
 		assertFalse(skip);
 
 	}
+	
+	@Test
+	public void canSortMatchesByTopAlnScore(){
+
+		Match m0= new Match();
+		Match m00= new Match();
+		ArrayList<Match> mlist0= new ArrayList<Match>();
+		mlist0.add(m0);
+		mlist0.add(m00);
+		Collections.sort(mlist0, Match.getAlnScoreComparator()); // Do not fail with uninitialize score.
+		
+		Match m1= new Match();
+		Match m2= new Match();
+		Match m3= new Match();
+		m1.setAln_score(10);
+		m2.setAln_score(100);
+		m3.setAln_score(50);
+		ArrayList<Match> mlist= new ArrayList<Match>();
+		mlist.add(m1);
+		mlist.add(m2);
+		mlist.add(m3);
+
+		Collections.sort(mlist, Match.getAlnScoreComparator());
+		assertEquals(m2, mlist.get(0));
+	}
+	
+	/*@Test
+	public void canPrintMatchFromListOfMatches(){
+		Match m1= new Match();
+		Match m2= new Match();
+		Match m3= new Match();
+		m1.setAln_score(10);
+		m2.setAln_score(100);
+		m3.setAln_score(50);
+		ArrayList<Match> mlist= new ArrayList<Match>();
+	}*/
+	
 }

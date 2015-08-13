@@ -48,6 +48,7 @@ public class Opener {
 		if(filename.equals("-")){
 			br = new BufferedReader(new InputStreamReader(System.in));
 		} else if(filename.endsWith(".gz")){
+			@SuppressWarnings("resource")
 			InputStream gzipStream = new GZIPInputStream(new FileInputStream(filename));
 			Reader decoder = new InputStreamReader(gzipStream);
 			br= new BufferedReader(decoder);
